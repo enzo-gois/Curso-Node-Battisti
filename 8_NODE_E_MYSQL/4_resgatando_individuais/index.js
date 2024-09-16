@@ -1,6 +1,6 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const app = express();
 
@@ -56,15 +56,24 @@ app.get('/books', (req, res) => {
 app.get('/books/:id', (req, res) => {
   const id = req.params.id;
 
-  const query = `SELECT * FROM books WHERE id = ${id}`;
+  const sql = `SELECT * FROM books WHERE id = ${id}`;
 
-  conn.query;
+  conn.query(sql, function (err, data) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    const book = data[0];
+
+    res.render('book', { book });
+  });
 });
 
 const conn = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'EnzoMysql3091',
   database: 'nodemysql',
 });
 
